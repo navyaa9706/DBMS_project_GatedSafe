@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add New Visitor</title>
+  <link rel="stylesheet" href="../static/style.css"> 
+</head>
+<body>
+
+  <div class="site-title">🏡 Gated Society</div>
+
+  <div class="container" style="margin-top: 500px;">
+    <h1>Add New Visitor</h1>
+    <p>Please enter the visitor's details below:</p>
+
+  <form action="/visitor/new" method="post">
+    <label for="visitorName">Visitor Name:</label>
+    <input type="text" id="visitorName" name="visitorName" required>
+
+    <label for="contact">Contact No.:</label>
+    <input type="text" id="contact" name="contact" required>
+
+    <label for="flatNo">Flat No.:</label>
+    <input type="text" id="flatNo" name="flatNo" required>
+
+    <label for="purpose">Purpose of Visit:</label>
+    <input type="text" id="purpose" name="purpose" required>
+
+    <label for="entryGate">Entry Gate:</label>
+    <input type="text" id="entryGate" name="entryGate" required>
+
+    <label for="status">Status:</label>
+    <input type="text" id="status" name="status" required>
+
+    <button type="submit">Submit Visitor</button>
+  </form>
+
+  <a class="back" href="/guard/dashboard">← Back to Dashboard</a>
+  </div>
+
+</body>
+</html>

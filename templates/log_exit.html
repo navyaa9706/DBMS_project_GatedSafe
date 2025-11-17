@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Log Visitor Exit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+
+  <div class="site-title">🏡 Gated Society</div>
+
+  <div class="container" style="margin-top: 240px; max-width: 640px;">
+    <h1>Log Visitor Exit</h1>
+    <p>Update exit time and gate for a visitor who has not yet exited.</p>
+
+    <form action="/log-exit" method="post">
+    <label for="visitorName">Visitor Name:</label>
+    <input type="text" id="visitorName" name="visitorName" required placeholder="e.g., Ravi Kumar">
+
+    <label for="contact">Contact No.:</label>
+    <input type="tel" id="contact" name="contact" required pattern="[0-9]{10}" placeholder="10-digit number">
+
+    <label for="exitTime">Exit Time:</label>
+    <input type="datetime-local" id="exitTime" name="exitTime" required>
+
+    <label for="exitGate">Exit Gate:</label>
+    <select id="exitGate" name="exitGate" required>
+      <option value="">--Select Gate--</option>
+      <option value="Gate 1">Gate 1</option>
+      <option value="Gate 2">Gate 2</option>
+      <option value="Gate 3">Gate 3</option>
+      <option value="Gate 4">Gate 4</option>
+    </select>
+
+    <button type="submit">Update Exit</button>
+  </form>
+
+  <br>
+  <a href="/guard/dashboard">← Back to Dashboard</a>
+  </div>
+
+</body>
+</html>

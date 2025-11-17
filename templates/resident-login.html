@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resident Login</title>
+  <link rel="stylesheet" href="../static/style.css" />
+</head>
+<body>
+  <div class="site-title">🏡 Gated Society</div>
+  <div class="container">
+    
+    <h2>Resident Login</h2>
+
+    <form action="/resident/login" method="post">
+      <label for="resident-id">Resident ID:</label>
+      <input type="text" id="resident-id" name="resident-id" required />
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required />
+
+      <button type="submit" class="btn">Login</button>
+    </form>
+  </div>
+</body>
+</html>

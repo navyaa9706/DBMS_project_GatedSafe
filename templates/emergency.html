@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emergency Alert</title>
+  <link rel="stylesheet" href="../static/style.css" />
+</head>
+<body>
+  <div class="site-title">🏡 Gated Society</div>
+
+  <div class="container" style="margin-top: 200px;">
+    <h2>Emergency Alert</h2>
+
+    <form action="/emergency" method="post">
+      <label for="flatno">Enter Flat Number:</label>
+      <input type="text" id="flatno" name="flatno" required />
+
+      <label for="details">Describe the Emergency:</label>
+      <textarea id="details" name="details" rows="4" required></textarea>
+
+      <button type="submit" class="btn emergency">Send Alert</button>
+    </form>
+
+    <br>
+    <a href="/guard/dashboard">← Back to Dashboard</a>
+  </div>
+</body>
+</html>

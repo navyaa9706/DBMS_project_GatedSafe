@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guard Login</title>
+  <link rel="stylesheet" href="../static/style.css" />
+</head>
+<body>
+  <div class="site-title">🏡 Gated Society</div>
+  <div class="container" style="margin-top: 140px;">
+    
+    <h2>Guard Login</h2>
+
+    <form action="/guard/login" method="post">
+      <label for="guard-id">Guard ID:</label>
+      <input type="text" id="guard-id" name="guard-id" required />
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required />
+
+      <button type="submit" class="btn">Login</button>
+    </form>
+  </div>
+</body>
+</html>
