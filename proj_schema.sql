@@ -52,7 +52,6 @@ entry_time datetime,
 exit_time datetime,
 entry_gate int,
 exit_gate int,
-status varchar(20),
 verified_by_guard int
 );
 
@@ -78,67 +77,6 @@ CREATE TABLE fixed_visitors (
     remarks VARCHAR(255),
     FOREIGN KEY (assigned_house_id) REFERENCES Flats(flat_no)
 );
-CREATE TABLE OverstayNotifications (
-    notification_id INT AUTO_INCREMENT PRIMARY KEY,
-    visitor_name VARCHAR(100),
-    visitor_contact VARCHAR(15),
-    flat_no INT,
-    entry_time DATETIME,
-    allowed_time_end TIME,
-    notified_guard INT,
-    notified_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    message VARCHAR(255)
-);
-
-DELIMITER $$
-CREATE PROCEDURE check_overstayed_visitors()
-BEGIN
-    INSERT INTO OverstayNotifications (visitor_name, visitor_contact, flat_no, entry_time, allowed_time_end, notified_guard, message)
-    SELECT 
-        e.visitor_name,
-        e.visitor_contact,
-        e.flat_no,
-        e.entry_time,
-        f.allowed_time_end,
-        e.verified_by_guard,
-        CONCAT('Fixed visitor ', e.visitor_name, ' has overstayed beyond allowed time.')
-    FROM EntryExitLogs e
-    JOIN Fixed_visitors f 
-        ON e.visitor_contact = f.phone_number
-    WHERE 
-        e.exit_time IS NULL
-        AND CURTIME() > f.allowed_time_end
-        AND e.status = 'Inside'
-        AND NOT EXISTS (
-            SELECT 1 FROM OverstayNotifications n
-            WHERE n.visitor_name = e.visitor_name
-              AND DATE(n.notified_at) = CURDATE()
-        );
-    INSERT INTO OverstayNotifications (visitor_name, visitor_contact, flat_no, entry_time, allowed_time_end, notified_guard, message)
-    SELECT 
-        e.visitor_name,
-        e.visitor_contact,
-        e.flat_no,
-        e.entry_time,
-        NULL AS allowed_time_end,
-        e.verified_by_guard,
-        CONCAT('Visitor ', e.visitor_name, ' has stayed more than 1 hour.')
-    FROM EntryExitLogs e
-    WHERE 
-        e.exit_time IS NULL
-        AND e.status = 'Inside'
-        AND NOT EXISTS (
-            SELECT 1 FROM Fixed_visitors f
-            WHERE f.phone_number = e.visitor_contact
-        )
-        AND TIMESTAMPDIFF(MINUTE, e.entry_time, NOW()) > 60
-        AND NOT EXISTS (
-            SELECT 1 FROM OverstayNotifications n
-            WHERE n.visitor_name = e.visitor_name
-              AND DATE(n.notified_at) = CURDATE()
-        );
-END$$
-DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE emergency_lookup(
@@ -192,74 +130,23 @@ BEGIN
 END$$
 DELIMITER ;
 
-DELIMITER $$
-CREATE TRIGGER add_new_visitor
-AFTER INSERT ON EntryExitLogs
-FOR EACH ROW
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1
-        FROM Visitors
-        WHERE contact = NEW.visitor_contact
-          AND v_name = NEW.visitor_name
-    ) THEN
-        INSERT INTO Visitors (VID, v_name, contact, no_of_visits, is_frequent)
-        VALUES (
-            (SELECT IFNULL(MAX(VID), 0) + 1 FROM Visitors),
-            NEW.visitor_name,
-            NEW.visitor_contact,
-            1,
-            FALSE
-        );
-    ELSE
-        UPDATE Visitors
-        SET no_of_visits = no_of_visits + 1,
-            is_frequent = (no_of_visits + 1) > 5
-        WHERE contact = NEW.visitor_contact
-          AND v_name = NEW.visitor_name;
-    END IF;
-END$$
-DELIMITER ;
+-- table was altered for easier VID generation..
+ALTER TABLE Visitors 
+MODIFY VID INT AUTO_INCREMENT PRIMARY KEY;
+
+--deleting the temp function and trigger : add_new_visitor / update_new_visitor
+
 
 DELIMITER $$
-
-CREATE TRIGGER update_visitor_visits
-AFTER INSERT ON EntryExitLogs
-FOR EACH ROW
-BEGIN
-    IF EXISTS (
-        SELECT 1
-        FROM Visitors
-        WHERE contact = NEW.visitor_contact
-          AND v_name = NEW.visitor_name
-    ) THEN
-        UPDATE Visitors
-        SET no_of_visits = no_of_visits + 1,
-            is_frequent = (no_of_visits + 1) >= 5 
-        WHERE contact = NEW.visitor_contact
-          AND v_name = NEW.visitor_name;
-    ELSE
-        INSERT INTO Visitors (VID, v_name, contact, no_of_visits, is_frequent)
-        VALUES (
-            (SELECT IFNULL(MAX(VID), 0) + 1 FROM Visitors), 
-            NEW.visitor_name,
-            NEW.visitor_contact,
-            1,
-            FALSE
-        );
-    END IF;
-END$$
-DELIMITER ;
-DELIMITER $$
-CREATE PROCEDURE UPDATEEXIT(IN visi_name varchar(30) , IN visi_contact varchar(10) )
+CREATE PROCEDURE UPDATEEXIT(IN visi_name varchar(30) , IN visi_contact varchar(10) ,IN exit_g int)
 BEGIN
 IF EXISTS(
 SELECT 1 FROM EntryExitLogs WHERE visitor_name = visi_name 
 AND visitor_contact = visi_contact
-AND status = 'Inside'
+AND exit_time IS NULL
 AND DATE(entry_time) = CURDATE()
 ) THEN
-UPDATE EntryExitLogs SET exit_time=NOW(), status = "Exited" WHERE visitor_name=visi_name AND visitor_contact=visi_contact AND status="Inside" AND DATE(entry_time)=CURDATE();
+UPDATE EntryExitLogs SET exit_time=NOW(), exit_gate=exit_g WHERE visitor_name=visi_name AND visitor_contact=visi_contact AND DATE(entry_time)=CURDATE();
 ELSE
 		SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = "WARNING! NO ACTIVE ENTRY FOUND FOR THIS VISITOR TODAY";

@@ -1,32 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GateWise | Guard Dashboard</title>
-  <link rel="stylesheet" href="../static/style.css" />
-  <style>
-    .logout-button {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      background-color: #f44336;
-      color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .logout-button:hover {
-      background-color: #d32f2f;
-    }
-  </style>
-</head>
-<body>
-  <div class="site-title">🏡 Gated Society</div>
+{% extends "base.html" %}
 
-  <a href="/" class="logout-button">Logout</a>
+{% block title %}GateWise | Guard Dashboard{% endblock %}
+
+{% block content %}
+  <div class="site-title">🏡 Gated Society</div>
 
   <div class="container">
     <h2>Guard Panel</h2>
@@ -35,11 +12,11 @@
     <div class="guard-options">
       <a href="/visitor/new" class="btn">➕ Add New Visitor</a>
       <a href="/frequent-visitors" class="btn">📋 Frequent Visitors</a>
-      <a href="/log-exit" class="btn">🚪Log Exit</a>
+      <a href="/log-exit" class="btn">🚪 Log Exit</a>
       <a href="/frequency-detection" class="btn">📊 Frequency Detection</a>
       <a href="/suspicious" class="btn">⚠️ Suspicious</a>
       <a href="/emergency" class="btn emergency">🚨 Emergency</a>
+      <a href="/past-records" class="btn">📜 Past Visitor Records</a>
     </div>
   </div>
-</body>
-</html>
+{% endblock %}

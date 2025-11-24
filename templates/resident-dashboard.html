@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resident Dashboard</title>
-  <link rel="stylesheet" href="../static/style.css" />
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Resident Dashboard{% endblock %}
+
+{% block content %}
   <div class="site-title">🏡 Gated Society</div>
 
   <div class="main-content">
@@ -14,9 +10,9 @@
       <h2 class="centered">Welcome</h2>
       <div class="details">
         <p>
-          <strong>Resident ID:</strong> [Resident ID here]<br>
-          <strong>Flat No:</strong> [Flat number here]<br>
-          <strong>Name:</strong> [Resident name here]
+          <strong>Resident ID:</strong> {{ resident.id }}<br>
+          <strong>Flat No:</strong> {{ resident.flat_no }}<br>
+          <strong>Name:</strong> {{ resident.name }}
         </p>
       </div>
     </div>
@@ -26,18 +22,32 @@
       
       <div style="max-width: 100%; overflow-x: auto;">
         <table border="1" cellpadding="8" cellspacing="0" style="width: 100%;">
-          <tr>
-            <th>ID</th>
-            <th>Visitor Name</th>
-            <th>Purpose</th>
-            <th>Entry Gate</th>
-            <th>Entry Time</th>
-            <th>Exit Gate</th>
-            <th>Exit Time</th>
-          </tr>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Visitor Name</th>
+              <th>Purpose</th>
+              <th>Entry Gate</th>
+              <th>Entry Time</th>
+              <th>Exit Gate</th>
+              <th>Exit Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for record in records %}
+            <tr>
+              <td>{{ record.log_id }}</td>
+              <td>{{ record.visitor_name }}</td>
+              <td>{{ record.purpose }}</td>
+              <td>{{ record.entry_gate }}</td>
+              <td>{{ record.entry_time }}</td>
+              <td>{{ record.exit_gate if record.exit_gate else '—' }}</td>
+              <td>{{ record.exit_time if record.exit_time else '—' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
         </table>
       </div>
     </div>
   </div>
-</body>
-</html>
+{% endblock %}

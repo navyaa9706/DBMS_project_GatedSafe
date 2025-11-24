@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Suspicious Visitors</title>
-  <link rel="stylesheet" href="../static/style.css">
-</head>
-<body>
+{% extends "base.html" %}
 
+{% block title %}Suspicious Visitors{% endblock %}
+
+{% block content %}
   <div class="site-title">🏡 Gated Society</div>
 
   <div class="container" style="margin-top: 100px;">
@@ -21,13 +17,20 @@
         <th>Flat No</th>
         <th>Entry Time</th>
         <th>Exit Time</th>
-        <th>Reason Flagged</th>
       </tr>
+      {% for visitor in suspicious %}
+      <tr>
+        <td>{{ visitor[0] }}</td>
+        <td>{{ visitor[1] }}</td>
+        <td>{{ visitor[2] }}</td>
+        <td>{{ visitor[3] }}</td>
+        <td>{{ visitor[4] }}</td>
+        <td>{{ visitor[5] }}</td>
+      </tr>
+      {% endfor %}
     </table>
 
     <br>
     <a href="/guard/dashboard">← Back to Dashboard</a>
   </div>
-
-</body>
-</html>
+{% endblock %}

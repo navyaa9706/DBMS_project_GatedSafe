@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Frequency & Suspicious Check</title>
-  <link rel="stylesheet" href="../static/style.css">
-</head>
-<body>
+{% extends "base.html" %}
 
+{% block title %}Frequency & Suspicious Check{% endblock %}
+
+{% block content %}
   <div class="site-title">🏡 Gated Society</div>
 
   <div class="container" style="margin-top: 1000px;">
@@ -36,6 +32,4 @@
     <br>
     <a href="/guard/dashboard">← Back to Dashboard</a>
   </div>
-
-</body>
-</html>
+{% endblock %}
