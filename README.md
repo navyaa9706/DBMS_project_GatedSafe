@@ -45,6 +45,3 @@
 
 ## 🤝 Contributing
 Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to change.
-
-👉 This README will make your repo look professional and easy to understand.  
-Would you like me to also **add a sample ER diagram** (Entity-Relationship diagram) section so that your DBMS design is visually clear to visitors?
